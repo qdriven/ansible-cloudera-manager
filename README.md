@@ -28,3 +28,8 @@ ansible-playbook -i inventory/static playbooks/bootstrap.yml
 ansible-playbook playbooks/common.yml
 .......
 ```
+
+5. Metric Report
+
+[metric-report](metrireport)
+Scripts to monitor cdh cluster and send email report.
