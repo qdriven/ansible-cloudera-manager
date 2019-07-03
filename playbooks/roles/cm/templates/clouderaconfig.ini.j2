@@ -110,11 +110,11 @@ SECURITY.REALM  = {{ krb_realm }}
 
 [LDAP]
 ldap.url = ldap://{{ virtual_ipaddress }}:389
-ldap.baseDN =  uid=#UID,dc=idc,dc=wanda-group,dc=net
+ldap.baseDN =  uid=#UID,dc=idc,dc=domain-group,dc=net
 
 [HIVE]
 hive.server2.authentication.ldap.url = ldap://{{ virtual_ipaddress }}:389
-hive.server2.authentication.ldap.baseDN  = ou=People,dc=IDC,dc=WANDA-GROUP,dc=NET 
+hive.server2.authentication.ldap.baseDN  = ou=People,dc=IDC,dc=domain-GROUP,dc=NET 
 hive.server2.authentication   = LDAP
 hive.server2.ldap.host = {{ virtual_ipaddress }} 
 
@@ -130,8 +130,8 @@ hue.service.safety.valve = [impala]
                            hive_server_host={{ hostvars[groups['hive-host'][0]].inventory_hostname }}
                            hive_server_port=10000
 
-base.dn = dc=idc,dc=wanda-group,dc=net
-bind.dn = cn=Manager,dc=idc,dc=wanda-group,dc=net
+base.dn = dc=idc,dc=domain-group,dc=net
+bind.dn = cn=Manager,dc=idc,dc=domain-group,dc=net
 user.filter = (objectClass=posixAccount)
 user.name.attr = uid
 group.filter = (objectClass=posixGroup)
@@ -142,7 +142,7 @@ search.bind.authentication = true
 auth.backend = desktop.auth.backend.LdapBackend
 ldap.url = ldap://{{ virtual_ipaddress }}:389
 pam.auth.service = login
-ldap.username.pattern = uid=#UID,ou=People,dc=idc,dc=wanda-group,dc=net
+ldap.username.pattern = uid=#UID,ou=People,dc=idc,dc=domain-group,dc=net
 time.zone = Asia/Shanghai
 use.start.tls = true
 create.users.on.login = true
@@ -152,7 +152,7 @@ impala.catalogserver.host = {{ impala_catalogserver_host }}
 impalad.cmd.args.safety.valve = --ldap_passwords_in_clear_ok
 enable.ldap.auth  = true
 impala.ldap.uri = ldap://{{ virtual_ipaddress }}:389
-ldap.bind.pattern  =  uid=#UID,ou=People,dc=idc,dc=wanda-group,dc=net
+ldap.bind.pattern  =  uid=#UID,ou=People,dc=idc,dc=domain-group,dc=net
 
 [OOZIE]
 oozie.server.host = {{ oozie_server_host }}
