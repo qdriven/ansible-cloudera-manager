@@ -1,0 +1,4 @@
+packages:
+  - openldap
+  - openldap-clients
+  - openldap-servers

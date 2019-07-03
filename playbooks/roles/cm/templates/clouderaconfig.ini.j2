@@ -1,0 +1,164 @@
+[CM]
+#service.types.and.names = {"ZOOKEEPER": "ZOOKEEPER","HDFS": "HDFS","MAPREDUCE": "MAPREDUCE","HBASE": "HBASE","OOZIE": "OOZIE","HIVE": "HIVE","HUE": "HUE","IMPALA": "IMPALA","SOLR": "SOLR","SQOOP": "SQOOP","YARN (MR2 Included)":"YARN (MR2 Included)"}
+service.types.and.names = {"ZOOKEEPER": "ZOOKEEPER","HDFS": "HDFS","YARN": "YARN","HBASE": "HBASE","HIVE": "HIVE","OOZIE": "OOZIE","HUE": "HUE","IMPALA": "IMPALA","SOLR": "SOLR","SQOOP": "SQOOP","SPARK_ON_YARN":"spark_on_yarn","SENTRY":"SENTRY"}
+cm.host = {{ hostvars[groups['hadoop-cluster'][0]].inventory_hostname }}
+cm.port = 7180
+cm.version = {{ cm_version }}
+host.list = {% for host in groups['hadoop-cluster'] %}
+{{ hostvars[host].inventory_hostname }}{%- if not loop.last %},{% endif %}
+{% endfor %}
+
+cluster.name = Cluster1
+cdh.version = CDH5
+cdh.version.number = 5
+
+hive.metastoreserver.host={{hive_metastoreserver_host}}
+hive.metastore.host = {{ virtual_ipaddress }}
+hive.metastore.name = metastore
+hive.metastore.password = 123456
+hive.metastore.database.type = mysql
+hive.metastore.database.port = 3306
+cm.username = admin
+cm.password = admin
+cm.service.name = mgmt
+host.username = root
+host.password = {{ host_password }}
+cm.repo.url = http://{{ centos_repo_host }}/cm/
+remote.parcel.repo.urls = http://{{ centos_repo_host }}/cdh/
+# please not change it !
+amon.name = ACTIVITYMONITOR
+firehose.database.user = amon
+firehose.database.name = amon
+# please not change it !
+apub.name = ALERTPUBLISHER
+# please not change it !
+eserv.name = EVENTSERVER
+event.server.heapsize = 215964392
+# please not change it !
+hmon.name = HOSTMONITOR
+# please not change it !
+smon.name = SERVICEMONITOR
+# please not change it !
+nav.name = NAVIGATOR
+navigator.database.user = nav
+navigator.database.name = nav
+# please not change it !
+navms.name= NAVIGATORMETASERVER
+nav.metaserver.database.user  = navms
+nav.metaserver.database.name = navms
+# please not change it !
+rman.name  = REPORTSMANAGER
+headlamp.database.name  =rman
+headlamp.database.user  =rman
+
+[HDFS]
+ha.namenode.standbyNnHost = {% for host in groups['hdfs-namenode'] if hostvars[host]['standby'] is defined and hostvars[host]['standby'] == 'yes' %}
+{{ hostvars[host].inventory_hostname }}
+{% endfor %}
+
+hdfs.standby.namenode.name = standbyNn
+hdfs.nameservice.name = nameservice1
+#Name of the quorum journal located on each JournalNodes' filesystem
+hdfs.qj.name = qj
+hdfs.activeFc.name = activeFc
+hdfs.standbyFc.name = standbyFc
+hdfs.forceInitZNode =true
+hdfs.clearExistingStandbyNameDirs = true
+hdfs.clearExistingJnEditsDir =true
+#must be odd size
+hdfs.jn.hostsList={% for host in groups['hdfs-journal']  %}
+{{ hostvars[host].inventory_hostname }}{%- if not loop.last %},{% endif %}
+{% endfor %}
+
+hdfs.jn.editsDir=/dfs/jn
+hdfs.gw.hosts = {% for host in groups['cm-gateway']  %}
+{{ hostvars[host].inventory_hostname }}{%- if not loop.last %},{% endif %}
+{% endfor %}
+
+#namenode dir
+dfs.name.dir.list = {{ dfs_name_dir_list }}
+#datanode dir
+dfs.data.dir.list = {{ dfs_data_dir_list }}
+
+[YARN]
+yarn.resouremanager.secondery = {% for host in groups['yarn-rm'] if hostvars[host]['standby'] is defined and hostvars[host]['standby'] == 'yes' %}
+{{ hostvars[host].inventory_hostname }}
+{% endfor %} 
+
+yarn.nodemanager.local.dirs = {{ yarn_nodemanager_local_dirs }}
+yarn.nodemanager.log.dirs = /data/d1/yarn/container-logs,/data/d2/yarn/container-logs
+
+[HBASE]
+hbase.backup.master  = {% for host in groups['hbase-nodes'] if hostvars[host]['backup_master'] is defined and hostvars[host]['backup_master'] == 'yes' %}
+{{ hostvars[host].inventory_hostname }}{%- if not loop.last %},{% endif %}
+{% endfor %}
+
+[ZOOKEEPER]
+zk.add.nodes = {% for host in groups['zk-nodes']  %}
+{{ host }}{%- if not loop.last %},{% endif %}
+{% endfor %}
+
+#zk data dir
+zk.data.dir = {{ zk_data_dir }}
+
+[KERBEROS]
+domain = {{ krb_realm }}
+username  = cloudera-scm/admin@{{ krb_realm }}
+password =  123456
+KDC.HOST = {{ virtual_ipaddress }} 
+SECURITY.REALM  = {{ krb_realm }}
+
+[LDAP]
+ldap.url = ldap://{{ virtual_ipaddress }}:389
+ldap.baseDN =  uid=#UID,dc=idc,dc=wanda-group,dc=net
+
+[HIVE]
+hive.server2.authentication.ldap.url = ldap://{{ virtual_ipaddress }}:389
+hive.server2.authentication.ldap.baseDN  = ou=People,dc=IDC,dc=WANDA-GROUP,dc=NET 
+hive.server2.authentication   = LDAP
+hive.server2.ldap.host = {{ virtual_ipaddress }} 
+
+[HUE]
+hue.server.host = {{ hue_server_host }}
+hue.service.safety.valve = [impala]
+                           server_host = {{ hostvars[groups['impala-host'][0]].inventory_hostname }}
+                           server_port = 21050
+                           impala_principal = impala/{{ hostvars[groups['impala-host'][0]].inventory_hostname }}@{{ krb_realm }}
+                           [hbase]
+                           hbase_clusters=(Cluster|{{ hostvars[groups['hbase-nodes'][0]].inventory_hostname }}:9090)
+                           [hive]
+                           hive_server_host={{ hostvars[groups['hive-host'][0]].inventory_hostname }}
+                           hive_server_port=10000
+
+base.dn = dc=idc,dc=wanda-group,dc=net
+bind.dn = cn=Manager,dc=idc,dc=wanda-group,dc=net
+user.filter = (objectClass=posixAccount)
+user.name.attr = uid
+group.filter = (objectClass=posixGroup)
+group.name.attr = net
+bind.password = 123456
+group.member.attr = memberUid
+search.bind.authentication = true
+auth.backend = desktop.auth.backend.LdapBackend
+ldap.url = ldap://{{ virtual_ipaddress }}:389
+pam.auth.service = login
+ldap.username.pattern = uid=#UID,ou=People,dc=idc,dc=wanda-group,dc=net
+time.zone = Asia/Shanghai
+use.start.tls = true
+create.users.on.login = true
+
+[IMPALA]
+impala.catalogserver.host = {{ impala_catalogserver_host }}
+impalad.cmd.args.safety.valve = --ldap_passwords_in_clear_ok
+enable.ldap.auth  = true
+impala.ldap.uri = ldap://{{ virtual_ipaddress }}:389
+ldap.bind.pattern  =  uid=#UID,ou=People,dc=idc,dc=wanda-group,dc=net
+
+[OOZIE]
+oozie.server.host = {{ oozie_server_host }}
+
+[SENTRY]
+sentry.server.host = {{ sentry_server_host }}
+
+[SOLR]
+solr.server.host = {{ solr_server_host }} 

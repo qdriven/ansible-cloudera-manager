@@ -1,0 +1,15 @@
+---
+- name: Apply the common role to all nodes
+  hosts: hadoop-cluster
+  any_errors_fatal: true
+  become: yes
+  pre_tasks:
+    - name: include global settings
+      include_vars: "{{ item }}"
+      with_items:
+        - group_vars/all
+    - name: Show hadoop-cluster info
+      debug: var=hostvars[inventory_hostname]
+      when: debug
+  roles:
+    - common

@@ -1,0 +1,13 @@
+---
+- name: Prepare OpenLDAP Client
+  hosts: hadoop-cluster
+  any_errors_fatal: true
+  become: yes
+  pre_tasks:
+    - name: include global settings
+      include_vars: group_vars/all
+    - name: Show OpenLDAP info
+      debug: var=hostvars[inventory_hostname]
+      when: debug
+  roles:
+    - openldap_cli

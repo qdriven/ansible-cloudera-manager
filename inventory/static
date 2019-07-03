@@ -1,0 +1,62 @@
+[hadoop-cluster]
+testbig1.domain.cn ansible_host=10.214.128.31 ansible_ssh_user=root ansible_ssh_pass=bigdata cm=yes ntp=yes
+testbig2.domain.cn ansible_host=10.214.128.32 ansible_ssh_user=root ansible_ssh_pass=bigdata
+testbig3.domain.cn ansible_host=10.214.128.33 ansible_ssh_user=root ansible_ssh_pass=bigdata
+testbig4.domain.cn ansible_host=10.214.128.34 ansible_ssh_user=root ansible_ssh_pass=bigdata
+testbig5.domain.cn ansible_host=10.214.128.35 ansible_ssh_user=root ansible_ssh_pass=bigdata
+testbig9.domain.cn ansible_host=10.214.128.39 ansible_ssh_user=root ansible_ssh_pass=bigdata
+testbig10.domain.cn ansible_host=10.214.128.40 ansible_ssh_user=root ansible_ssh_pass=bigdata
+testbig11.domain.cn ansible_host=10.214.128.41 ansible_ssh_user=root ansible_ssh_pass=bigdata
+
+[ntp]
+testbig1.domain.cn ansible_host=10.214.128.31 ansible_ssh_user=root ansible_ssh_pass=bigdata
+
+[kdc]
+testbig1.domain.cn ansible_host=10.214.128.31 ansible_ssh_user=root ansible_ssh_pass=bigdata master=yes
+testbig2.domain.cn ansible_host=10.214.128.32 ansible_ssh_user=root ansible_ssh_pass=bigdata slave=yes
+
+[mariadb]
+testbig1.domain.cn ansible_host=10.214.128.31 ansible_ssh_user=root ansible_ssh_pass=bigdata
+
+[openldap]
+testbig1.domain.cn ansible_host=10.214.128.31 ansible_ssh_user=root ansible_ssh_pass=bigdata one=yes
+testbig2.domain.cn ansible_host=10.214.128.32 ansible_ssh_user=root ansible_ssh_pass=bigdata two=yes
+testbig3.domain.cn ansible_host=10.214.128.33 ansible_ssh_user=root ansible_ssh_pass=bigdata three=yes
+
+[cm]
+testbig1.domain.cn ansible_host=10.214.128.31 ansible_ssh_user=root ansible_ssh_pass=bigdata
+
+[hdfs-namenode]
+testbig3.domain.cn ansible_host=10.214.128.33 ansible_ssh_user=root ansible_ssh_pass=bigdata
+
+[hdfs-journal]
+testbig1.domain.cn ansible_host=10.214.128.31 ansible_ssh_user=root ansible_ssh_pass=bigdata
+testbig2.domain.cn ansible_host=10.214.128.32 ansible_ssh_user=root ansible_ssh_pass=bigdata
+testbig3.domain.cn ansible_host=10.214.128.33 ansible_ssh_user=root ansible_ssh_pass=bigdata
+
+[cm-gateway]
+testbig4.domain.cn ansible_host=10.214.128.34 ansible_ssh_user=root ansible_ssh_pass=bigdata
+testbig5.domain.cn ansible_host=10.214.128.35 ansible_ssh_user=root ansible_ssh_pass=bigdata
+
+[yarn-rm]
+testbig3.domain.cn ansible_host=10.214.128.33 ansible_ssh_user=root ansible_ssh_pass=bigdata standby=yes
+
+[hbase-nodes]
+testbig4.domain.cn ansible_host=10.214.128.34 ansible_ssh_user=root ansible_ssh_pass=bigdata backup_master=yes
+testbig5.domain.cn ansible_host=10.214.128.35 ansible_ssh_user=root ansible_ssh_pass=bigdata backup_master=yes
+testbig9.domain.cn ansible_host=10.214.128.39 ansible_ssh_user=root ansible_ssh_pass=bigdata backup_master=yes
+
+[impala-host]
+testbig4.domain.cn ansible_host=10.214.128.34 ansible_ssh_user=root ansible_ssh_pass=bigdata
+
+[hive-host]
+testbig4.domain.cn ansible_host=10.214.128.34 ansible_ssh_user=root ansible_ssh_pass=bigdata
+
+[zk-nodes]
+testbig3.domain.cn ansible_host=10.214.128.33 ansible_ssh_user=root ansible_ssh_pass=bigdata
+testbig4.domain.cn ansible_host=10.214.128.34 ansible_ssh_user=root ansible_ssh_pass=bigdata
+testbig5.domain.cn ansible_host=10.214.128.35 ansible_ssh_user=root ansible_ssh_pass=bigdata
+
+[nginx-keepalived]
+testbig4.domain.cn ansible_host=10.214.128.34 ansible_ssh_user=root ansible_ssh_pass=bigdata master=yes
+testbig5.domain.cn ansible_host=10.214.128.35 ansible_ssh_user=root ansible_ssh_pass=bigdata standby=yes

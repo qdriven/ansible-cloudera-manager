@@ -1,0 +1,86 @@
+---
+- name: Load OS specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "redhat-7.yml"
+      paths:
+        - ../vars
+
+- name: Copy repo files
+  file: path="/etc/yum.repos.d" state=absent
+- file: path="/etc/yum.repos.d" state=directory
+- template: src="{{ item }}.j2" dest="/etc/yum.repos.d/{{ item }}"
+  with_items:
+    - CentOS-IDC-Local.repo
+    - EPEL-IDC-Local.repo
+    - MariaDB-IDC-Local.repo
+    - cdh-IDC-Local.repo
+    - cloudera-manager.repo
+    - cm-IDC-Local.repo
+
+- name: clear cm installed files
+  shell: echo "{{ item }}" | awk -F"," '{for(i=1; i<=NF; i++) print $i}' | xargs rm -rf
+  with_items:
+    - "{{ dfs_name_dir_list }}"
+    - "{{ dfs_data_dir_list }}"
+    - "{{ yarn_nodemanager_local_dirs }}"
+    - "{{ zk_data_dir }}"
+    - "{{ solr_data_dir }}"
+
+#- name: clear cdh file
+#  file: path={{ item }} state=absent
+#  with_items:
+#    - "/dfs"
+#    - "/data"
+#    - "/var/lib/zookeeper"
+#    - "/var/lib/solr"
+
+- name: clear nginx configuration for kdc ldap
+  file: path=/etc/sssd/sssd.conf state=absent
+
+- name: ensure required packages are installed
+  yum:
+    name: "{{ item }}"
+    update_cache: yes
+    state: latest
+  with_items: "{{ packages|default([]) }}"
+
+- name: increase entropy
+  shell: rngd -o /dev/random -r /dev/urandom
+  when: demo_run
+
+- name: install jdk
+  copy: src=files/jdk-8u60-linux-x64.rpm dest=/tmp/jdk-8u60-linux-x64.rpm
+- yum: name=/tmp/jdk-8u60-linux-x64.rpm state=present
+- file: path=/tmp/jdk-8u60-linux-x64.rpm state=absent
+
+- name: update jar and set JAVA_HOME
+  copy: src="files/{{item}}" dest="/usr/java/latest/jre/lib/security/{{item}}"
+  with_items:
+    - local_policy.jar
+    - US_export_policy.jar
+- lineinfile: dest=/etc/profile regexp="^JAVA_HOME=" line="export JAVA_HOME=/usr/java/latest"
+
+- name: generate krb5.conf
+  template: src="krb5conf.j2" dest=/etc/krb5.conf mode=0644
+
+- name: ntp configurqtion for server and clients
+  template: src=ntp.conf.j2 dest=/etc/ntp.conf
+  when: ntp is defined
+- template: src=ntp.conf.cli.j2 dest=/etc/ntp.conf
+  when: ntp is not defined
+
+- name: start ntp server and synchronize time from ntp server
+  service: name=ntpd state=stopped enabled=no pattern='/ntpd'
+- service: name=ntpd state=started enabled=yes pattern='/ntpd'
+  when: ntp is defined
+- shell: ntpdate {{ hostvars[ groups['ntp'][0] ].inventory_hostname }}
+  when: ntp is not defined
+
+#- cron: name="sync time" minute="*/5" job="/usr/sbin/ntpdate {{ hostvars[ groups['ntp'][0] ].inventory_hostname }}"
+#  when: ntp is not defined
+
+- name: Start ntp service for clients
+  service: name=ntpd state=started enabled=yes pattern='/ntpd'
+  when: ntp is not defined

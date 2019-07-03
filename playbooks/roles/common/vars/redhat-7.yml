@@ -1,0 +1,13 @@
+packages:
+  - firewalld
+  - ntpdate
+  - krb5-libs
+  - krb5-workstation
+  - rng-tools
+  - pam_ldap
+  - setuptool
+  - openldap-clients
+  - ntp
+  - net-tools
+  - vim
+  - lsof

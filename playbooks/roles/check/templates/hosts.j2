@@ -1,0 +1,4 @@
+127.0.0.1 localhost.localdomain localhost
+{% for node in groups['hadoop-cluster'] %}
+{{ hostvars[node].ansible_host }} {{ hostvars[node]['inventory_hostname'] }} {{ hostvars[node]['inventory_hostname_short'] }}
+{% endfor %}

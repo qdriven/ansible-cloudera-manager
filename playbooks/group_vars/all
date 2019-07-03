@@ -1,0 +1,34 @@
+debug: true
+demo_run: true
+centos_repo_host: '10.214.96.85:86/repo'
+def_bind_eth: eth0
+host_password: bigdata
+#cm version 13 CDH5.8.0 12 CDH5.7.1
+cm_version: 12
+# openldap
+openldap_server_rootpw: 123456
+# kerberos
+krb_realm: TDAC.domain-GROUP.NET
+kdc_port: 88
+krb_admin_port: 749
+# nginx & keepalived
+listen_port: 8008
+server_name: localhost
+virtual_ipaddress: 10.214.128.251
+
+# check if this id is unique
+virtual_router_id: 55
+
+# CM comonents
+hive_metastoreserver_host: testbig2.domain.cn
+hue_server_host: testbig2.domain.cn
+impala_catalogserver_host: testbig4.domain.cn
+oozie_server_host: testbig4.domain.cn
+sentry_server_host: testbig5.domain.cn
+solr_server_host: testbig9.domain.cn
+# CM install directory
+dfs_name_dir_list: /dfs/nn1,/dfs/nn2,/dfs/nn3
+dfs_data_dir_list: /dfs/dn1,/dfs/dn2 
+yarn_nodemanager_local_dirs: /data/d1/yarn/nm,/data/d2/yarn/nm
+zk_data_dir: /var/lib/zookeeper
+solr_data_dir: /var/lib/solr

@@ -1,0 +1,31 @@
+[domain/default]
+
+autofs_provider = ldap
+cache_credentials = True
+ldap_search_base = dc=idc,dc=wanda-group,dc=net
+id_provider = ldap
+auth_provider = ldap
+chpass_provider = ldap
+ldap_uri = ldap://{{hostvars[groups['openldap'][0]].ansible_host}},ldap://{{hostvars[groups['openldap'][1]].ansible_host}},ldap://{{hostvars[groups['openldap'][2]].ansible_host}}
+ldap_id_use_start_tls = False
+ldap_tls_cacertdir = /etc/openldap/cacerts
+[sssd]
+services = nss, pam, autofs
+config_file_version = 2
+
+domains = default
+[nss]
+homedir_substring = /home
+
+[pam]
+
+[sudo]
+
+[autofs]
+
+[ssh]
+
+[pac]
+
+[ifp]
+

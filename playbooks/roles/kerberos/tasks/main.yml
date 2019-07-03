@@ -1,0 +1,111 @@
+---
+- name: Load OS specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "redhat-7.yml" 
+      paths:
+        - ../vars
+
+- name: Load Kerberos variables
+  include_vars: krb5.yml
+
+- name: Stop Kerberos services & remove packages
+  service: name={{ item }} enabled=no state=stopped
+  with_items:
+    - krb5kdc
+    - kadmin
+  ignore_errors: true
+- yum: 
+    name: "{{ item }}" 
+    update_cache: yes 
+    state: removed 
+  with_items:
+    - krb5-server
+    - krb5-workstation
+- file: path={{ item }} state=absent
+  with_items:
+    - /var/kerberos/krb5kdc
+    - /etc/krb5.keytab
+  
+- name: Ensure required packages are installed (yum)
+  yum: 
+    name: "{{ item }}" 
+    update_cache: yes 
+    state: latest 
+  with_items:
+    - krb5-server
+    - krb5-workstation
+
+- yum: 
+    name: "{{ item }}" 
+    update_cache: yes 
+    state: latest 
+  with_items:
+    - krb5-libs
+  when: master is defined
+   
+- template: src="{{ item }}.j2" dest=/var/kerberos/krb5kdc/{{ item }} mode=600
+  with_items:
+    - kdc.conf
+    - kadm5.acl
+  when: master is defined
+
+- shell: "{{ item }}"
+  with_items:
+    - kdb5_util create -r {{ krb_realm }} -s -P {{ kadmin_db_pass }}
+    - echo -e "{{ kadmin_pass }}\n{{ kadmin_pass }}" | kadmin.local -q "addprinc admin/admin@{{ krb_realm }}"
+    - echo -e "{{ kadmin_pass }}\n{{ kadmin_pass }}" | kadmin.local -q "addprinc cloudera-scm/admin@{{ krb_realm }}"
+  when: master is defined
+
+- name: Start master krb5kdc kadmin service
+  service: name={{ item }} enabled=yes state=started
+  with_items:
+    - krb5kdc
+    - kadmin
+  when: master is defined
+
+- name: KDC HA create principal
+  shell: echo -e "{{ item }}" | kadmin.local
+  with_items:
+    - "addprinc -randkey host/{{ hostvars[ groups['kdc'][0] ].inventory_hostname }}"
+    - "addprinc -randkey host/{{ hostvars[ groups['kdc'][1] ].inventory_hostname }}"
+    - "xst host/{{ hostvars[ groups['kdc'][0] ].inventory_hostname }}"
+    - "xst host/{{ hostvars[ groups['kdc'][1] ].inventory_hostname }}"
+  when: master is defined
+
+- name: KDC HA copy file from machine1 to local
+  fetch: src={{ item }} dest=/tmp
+  with_items:
+    - /etc/krb5.conf
+    - /var/kerberos/krb5kdc/kdc.conf
+    - /var/kerberos/krb5kdc/kadm5.acl
+    - /var/kerberos/krb5kdc/.k5.{{ krb_realm }}
+    - /etc/krb5.keytab
+  when: master is defined
+
+- copy: src=/tmp/{{ hostvars[ groups['kdc'][0] ].inventory_hostname }}/etc/krb5.conf dest=/etc/krb5.conf mode=644
+  when: slave is defined
+- name: KDC HA copy file from local to slave
+  copy: src=/tmp/{{ hostvars[ groups['kdc'][0] ].inventory_hostname }}/{{ item }} dest={{ item }} mode=600
+  with_items:
+    - /var/kerberos/krb5kdc/kdc.conf
+    - /var/kerberos/krb5kdc/kadm5.acl
+    - /var/kerberos/krb5kdc/.k5.{{ krb_realm }}
+    - /etc/krb5.keytab
+  when: slave is defined
+
+- template: src="kpropd.acl.j2" dest=/var/kerberos/krb5kdc/kpropd.acl mode=600
+- service: name=kprop enabled=yes state=started
+  when: slave is defined
+
+- template: src="krb5_db_prop.sh.j2" dest=/var/kerberos/krb5_db_prop.sh mode=755
+  when: master is defined
+- shell: /var/kerberos/krb5_db_prop.sh
+  when: master is defined
+- shell: echo "45 4 * * * root /var/kerberos/krb5_db_prop.sh >/dev/null 2>&1" >> /etc/crontab
+  when: master is defined
+
+- name: start slave krb5kdc service
+  service: name=krb5kdc enabled=yes state=started
+  when: slave is defined

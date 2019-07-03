@@ -1,0 +1,13 @@
+---
+- name: Install CM 
+  hosts: cm 
+  any_errors_fatal: true
+  become: yes
+  pre_tasks:
+    - include_vars: "{{ item }}"
+      with_items:
+        - group_vars/all
+    - debug: var=hostvars[inventory_hostname]
+      when: debug
+  roles:
+    - cm

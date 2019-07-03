@@ -1,0 +1,13 @@
+---
+- name: Prepare mariadb
+  hosts: mariadb
+  any_errors_fatal: true
+  become: yes
+  pre_tasks:
+    - name: include global settings
+      include_vars: group_vars/all
+    - name: Show mariadb info
+      debug: var=hostvars[inventory_hostname]
+      when: debug
+  roles:
+    - mariadb

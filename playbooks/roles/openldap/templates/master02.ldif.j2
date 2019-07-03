@@ -1,0 +1,41 @@
+# create new
+dn: cn=config
+changetype: modify
+add: olcServerID
+# specify uniq ID number on each server
+olcServerID: 1
+
+dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+add: olcSyncRepl
+olcSyncRepl: rid=001
+             provider=ldap://{{ hostvars[ groups['openldap'][0] ].ansible_host }}:389/
+             bindmethod=simple
+             binddn="cn=Manager,dc=idc,dc=wanda-group,dc=net"
+             credentials={{ openldap_server_rootpw }}
+             searchbase="dc=idc,dc=wanda-group,dc=net"
+             scope=sub
+             schemachecking=on
+             type=refreshAndPersist
+             retry="30 5 300 3"
+             interval=00:00:05:00
+olcSyncRepl: rid=002
+             provider=ldap://{{ hostvars[ groups['openldap'][2] ].ansible_host }}:389/
+             bindmethod=simple
+             binddn="cn=Manager,dc=idc,dc=wanda-group,dc=net"
+             credentials={{ openldap_server_rootpw }}
+             searchbase="dc=idc,dc=wanda-group,dc=net"
+             scope=sub
+             schemachecking=on
+             type=refreshAndPersist
+             retry="30 5 300 3"
+             interval=00:00:05:00
+-
+add: olcMirrorMode
+olcMirrorMode: TRUE
+
+dn: olcOverlay=syncprov,olcDatabase={2}hdb,cn=config
+changetype: add
+objectClass: olcOverlayConfig
+objectClass: olcSyncProvConfig
+olcOverlay: syncprov

@@ -1,0 +1,87 @@
+---
+- name: Load OS specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "redhat-7.yml"
+      paths:
+        - ../vars
+
+- name: remove openldap
+  service: name=slapd state=stopped enabled=no
+  ignore_errors: true
+- yum: name=openldap-servers state=removed
+  ignore_errors: true
+- file: path={{ item }} state=absent
+  with_items:
+    - /usr/share/openldap-servers
+    - /var/lib/ldap
+    - /etc/openldap
+  ignore_errors: true
+
+- name: install openldap
+  yum: 
+    name: "{{ item }}" 
+    update_cache: yes 
+    state: installed
+  with_items: "{{ packages|default([]) }}"
+- copy: 
+    remote_src: True
+    src: /usr/share/openldap-servers/DB_CONFIG.example 
+    dest: /var/lib/ldap/DB_CONFIG
+    owner: ldap
+    group: ldap
+- service: name=slapd state=started enabled=yes
+- shell: slappasswd -s {{ openldap_server_rootpw }}
+  register: root_password
+- template: src="{{ item }}.ldif.j2" dest=/tmp/{{ item }}.ldif
+  with_items:
+    - chrootpw
+    - chdomain
+    - basedomain
+    - subtree
+- shell: "{{ item }}" 
+  with_items: 
+    - ldapadd -Y EXTERNAL -H ldapi:/// -f /tmp/chrootpw.ldif
+    - ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/cosine.ldif
+    - ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/nis.ldif
+    - ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif
+    - ldapmodify -Y EXTERNAL -H ldapi:/// -f /tmp/chdomain.ldif
+    - ldapadd -x -D cn=Manager,dc=idc,dc=wanda-group,dc=net -w {{ openldap_server_rootpw }} -f /tmp/basedomain.ldif
+    - ldapadd -x -D cn=Manager,dc=idc,dc=wanda-group,dc=net -w {{ openldap_server_rootpw }} -f /tmp/subtree.ldif
+
+- name: N-way Multimaster
+  template: src="{{ item }}.ldif.j2" dest=/tmp/{{ item }}.ldif
+  with_items:
+    - mod_syncprov
+    - syncprov
+- shell: "{{ item }}"
+  with_items:
+    - ldapadd -Y EXTERNAL -H ldapi:/// -f /tmp/mod_syncprov.ldif
+    - ldapadd -Y EXTERNAL -H ldapi:/// -f /tmp/syncprov.ldif
+- template: src="master01.ldif.j2" dest=/tmp/master01.ldif
+  when: one is defined
+- shell: ldapmodify -Y EXTERNAL -H ldapi:/// -f /tmp/master01.ldif
+  when: one is defined
+- template: src="master02.ldif.j2" dest=/tmp/master02.ldif
+  when: two is defined
+- shell: ldapmodify -Y EXTERNAL -H ldapi:/// -f /tmp/master02.ldif
+  when: two is defined
+- template: src="master03.ldif.j2" dest=/tmp/master03.ldif
+  when: three is defined
+- shell: ldapmodify -Y EXTERNAL -H ldapi:/// -f /tmp/master03.ldif
+  when: three is defined
+- service: name=slapd state=restarted
+   
+- name: Purge temp files
+  file: path=/tmp/{{ item }}.ldif state=absent
+  with_items:
+    - chrootpw
+    - chdomain
+    - basedomain
+    - subtree
+    - mod_syncprov
+    - syncprov
+    - master01
+    - master02
+    - master03

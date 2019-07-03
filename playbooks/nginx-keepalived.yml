@@ -1,0 +1,14 @@
+---
+- name: Prepare Nginx
+  hosts: nginx-keepalived
+  any_errors_fatal: true
+  become: yes
+  pre_tasks:
+    - name: include global settings
+      include_vars: group_vars/all
+    - name: Show Nginx Keepalived info
+      debug: var=hostvars[inventory_hostname]
+      when: debug
+  roles:
+    - nginx-keepalived
+

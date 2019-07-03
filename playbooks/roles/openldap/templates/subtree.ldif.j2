@@ -1,0 +1,636 @@
+version: 1
+
+dn: ou=Group,dc=idc,dc=wanda-group,dc=net
+objectClass: organizationalUnit
+ou: Group
+
+dn: cn=idc_infrastructure_group,ou=Group,dc=idc,dc=wanda-group,dc=net
+objectClass: top
+objectClass: posixGroup
+cn: idc_infrastructure_group
+gidNumber: 2100
+memberUid:: IA==
+
+dn: cn=idc_analysis_group,ou=Group,dc=idc,dc=wanda-group,dc=net
+objectClass: posixGroup
+objectClass: top
+cn: idc_analysis_group
+gidNumber: 2200
+memberUid:: IA==
+
+dn: cn=idc_manager_group,ou=Group,dc=idc,dc=wanda-group,dc=net
+objectClass: posixGroup
+objectClass: top
+cn: idc_manager_group
+gidNumber: 2000
+memberUid:: IA==
+
+dn: cn=idc_development_group,ou=Group,dc=idc,dc=wanda-group,dc=net
+objectClass: posixGroup
+objectClass: top
+cn: idc_development_group
+gidNumber: 2300
+memberUid:: IA==
+
+dn: cn=idc_administrator_group,ou=Group,dc=idc,dc=wanda-group,dc=net
+objectClass: posixGroup
+objectClass: top
+cn: idc_development_group
+gidNumber: 2400
+memberUid:: IA==
+
+dn: cn=idc_etl_group,ou=Group,dc=idc,dc=wanda-group,dc=net
+objectClass: posixGroup
+objectClass: top
+cn: idc_development_group
+gidNumber: 2410
+memberUid:: IA==
+
+dn: cn=ffan_analysis_group,ou=Group,dc=idc,dc=wanda-group,dc=net
+objectClass: posixGroup
+objectClass: top
+cn: ffan_analysis_group
+gidNumber: 3000
+memberUid:: IA==
+
+dn: cn=ffan_development_group,ou=Group,dc=idc,dc=wanda-group,dc=net
+objectClass: posixGroup
+objectClass: top
+cn: ffan_development_group
+gidNumber: 3100
+memberUid:: IA==
+
+dn: cn=99bill_analysis_group,ou=Group,dc=idc,dc=wanda-group,dc=net
+objectClass: posixGroup
+objectClass: top
+cn: 99bill_analysis_group
+gidNumber: 4000
+memberUid:: IA==
+
+dn: cn=99bill_development_group,ou=Group,dc=idc,dc=wanda-group,dc=net
+objectClass: posixGroup
+objectClass: top
+cn: 99bill_development_group
+gidNumber: 4100
+memberUid:: IA==
+
+dn: cn=credit_analysis_group,ou=Group,dc=idc,dc=wanda-group,dc=net
+objectClass: posixGroup
+objectClass: top
+cn: credit_analysis_group
+gidNumber: 5000
+memberUid:: IA==
+
+dn: cn=credit_development_group,ou=Group,dc=idc,dc=wanda-group,dc=net
+objectClass: posixGroup
+objectClass: top
+cn: credit_development_group
+gidNumber: 5100
+memberUid:: IA==
+
+dn: cn=loan_analysis_group,ou=Group,dc=idc,dc=wanda-group,dc=net
+objectClass: posixGroup
+objectClass: top
+cn: loan_analysis_group
+gidNumber: 6000
+memberUid:: IA==
+
+dn: cn=loan_development_group,ou=Group,dc=idc,dc=wanda-group,dc=net
+objectClass: posixGroup
+objectClass: top
+cn: loan_development_group
+gidNumber: 6100
+memberUid:: IA==
+
+dn: cn=wealth_analysis_group,ou=Group,dc=idc,dc=wanda-group,dc=net
+objectClass: posixGroup
+objectClass: top
+cn: wealth_analysis_group
+gidNumber: 7000
+memberUid:: IA==
+
+dn: cn=wealth_development_group,ou=Group,dc=idc,dc=wanda-group,dc=net
+objectClass: posixGroup
+objectClass: top
+cn: wealth_development_group
+gidNumber: 7100
+memberUid:: IA==
+
+dn: cn=idc_app_group,ou=Group,dc=idc,dc=wanda-group,dc=net
+objectClass: posixGroup
+objectClass: top
+cn: idc_app_group
+gidNumber: 2400
+memberUid:: IA==
+
+dn: ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: organizationalUnit
+ou: People
+
+dn: uid=idc_admin,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: idc_admin
+gidNumber: 2400
+homeDirectory: /home/idc_admin
+uid: idc_admin
+uidNumber: 2401
+userPassword:: MTIzNDU2
+
+dn: uid=etl_user,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: etl_user
+gidNumber: 2410
+homeDirectory: /home/etl_user
+uid: etl_user
+uidNumber: 2411
+userPassword:: MTIzNDU2
+
+dn: uid=zhangliang89,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: zhangliang89
+gidNumber: 2300
+homeDirectory: /home/zhangliang89
+uid: zhangliang89
+uidNumber: 2304
+userPassword:: MTIzNDU2
+
+dn: uid=zhaoxudong5,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: zhaoxudong5
+gidNumber: 2200
+homeDirectory: /home/zhaoxudong5
+uid: zhaoxudong5
+uidNumber: 2203
+userPassword:: MTIzNDU2
+
+dn: uid=zhangmenghang,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: zhangmenghang
+gidNumber: 2200
+homeDirectory: /home/zhangmenghang
+uid: zhangmenghang
+uidNumber: 2205
+userPassword:: MTIzNDU2
+
+dn: uid=liufan27,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: liufan27
+gidNumber: 2200
+homeDirectory: /home/liufan27
+uid: liufan27
+uidNumber: 2204
+userPassword:: MTIzNDU2
+
+dn: uid=haodong5,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: haodong5
+gidNumber: 2200
+homeDirectory: /home/haodong5
+uid: haodong5
+uidNumber: 2202
+userPassword:: MTIzNDU2
+
+dn: uid=fuxing3,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: fuxing3
+gidNumber: 2200
+homeDirectory: /home/fuxing3
+uid: fuxing3
+uidNumber: 2201
+userPassword:: MTIzNDU2
+
+dn: uid=sunning18,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: sunning18
+gidNumber: 2200
+homeDirectory: /home/sunning18
+uid: sunning18
+uidNumber: 2207
+userPassword:: MTIzNDU2
+
+dn: uid=zhangminzhi,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: zhangminzhi
+gidNumber: 2200
+homeDirectory: /home/zhangminzhi
+uid: zhangminzhi
+uidNumber: 2210
+userPassword:: MTIzNDU2
+
+dn: uid=zhangchangjiang3,ou=People,dc=idc,dc=wanda-group,
+ dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: zhangchangjiang3
+gidNumber: 2200
+homeDirectory: /home/zhangchangjiang3
+uid: zhangchangjiang3
+uidNumber: 2206
+userPassword:: MTIzNDU2
+
+dn: uid=wumei10,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: wumei10
+gidNumber: 2200
+homeDirectory: /home/wumei10
+uid: wumei10
+uidNumber: 2208
+userPassword:: MTIzNDU2
+
+dn: uid=charlescai,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: charlescai
+gidNumber: 2000
+homeDirectory: /home/charlescai
+uid: charlescai
+uidNumber: 2001
+userPassword:: MTIzNDU2
+
+dn: uid=lixiangbao,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: lixiangbao
+gidNumber: 2200
+homeDirectory: /home/lixiangbao
+uid: lixiangbao
+uidNumber: 2212
+userPassword:: MTIzNDU2
+
+dn: uid=zhaoshuang17,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: zhaoshuang17
+gidNumber: 2200
+homeDirectory: /home/zhaoshuang17
+uid: zhaoshuang17
+uidNumber: 2213
+userPassword:: MTIzNDU2
+
+dn: uid=xudalei1,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: xudalei1
+gidNumber: 2200
+homeDirectory: /home/xudalei1
+uid: xudalei1
+uidNumber: 2211
+userPassword:: MTIzNDU2
+
+dn: uid=ludejun1,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: ludejun1
+gidNumber: 2200
+homeDirectory: /home/ludejun1
+uid: ludejun1
+uidNumber: 2209
+userPassword:: MTIzNDU2
+
+dn: uid=zhangyingfeng1,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: zhangyingfeng1
+gidNumber: 2300
+homeDirectory: /home/zhangyingfeng1
+uid: zhangyingfeng1
+uidNumber: 2301
+userPassword:: MTIzNDU2
+
+dn: uid=lichengxiang5,ou=People,dc=idc,dc=wanda-group,dc=
+ net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: lichengxiang5
+gidNumber: 2300
+homeDirectory: /home/lichengxiang5
+uid: lichengxiang5
+uidNumber: 2302
+userPassword:: MTIzNDU2
+
+dn: uid=wangzuo3,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: wangzuo3
+gidNumber: 2300
+homeDirectory: /home/wangzuo3
+uid: wangzuo3
+uidNumber: 2303
+userPassword:: MTIzNDU2
+
+dn: uid=fudian,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: fudian
+gidNumber: 2100
+homeDirectory: /home/fudian
+uid: fudian
+uidNumber: 2107
+userPassword:: MTIzNDU2
+
+dn: uid=xuxu7,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: xuxu7
+gidNumber: 2100
+homeDirectory: /home/xuxu7
+uid: xuxu7
+uidNumber: 2106
+userPassword:: MTIzNDU2
+
+dn: uid=heyu16,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: heyu16
+gidNumber: 2100
+homeDirectory: /home/heyu16
+uid: heyu16
+uidNumber: 2105
+userPassword:: MTIzNDU2
+
+dn: uid=tianjie12,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: tianjie12
+gidNumber: 2100
+homeDirectory: /home/tianjie12
+uid: tianjie12
+uidNumber: 2104
+userPassword:: MTIzNDU2
+
+dn: uid=lidachao1,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: lidachao1
+gidNumber: 2100
+homeDirectory: /home/lidachao1
+uid: lidachao1
+uidNumber: 2103
+userPassword:: MTIzNDU2
+
+dn: uid=chenxinjiang,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: chenxinjiang
+gidNumber: 2100
+homeDirectory: /home/chenxinjiang
+uid: chenxinjiang
+uidNumber: 2102
+userPassword:: MTIzNDU2
+
+dn: uid=gongshaocheng,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: gongshaocheng
+gidNumber: 2100
+homeDirectory: /home/gongshaocheng
+uid: gongshaocheng
+uidNumber: 2101
+userPassword:: MTIzNDU2
+
+dn: uid=run.qiu,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: run.qiu
+gidNumber: 4000
+homeDirectory: /home/run.qiu
+uid: run.qiu
+uidNumber: 4005
+userPassword:: MTIzNDU2
+
+dn: uid=li.fang,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: li.fang
+gidNumber: 4000
+homeDirectory: /home/li.fang
+uid: li.fang
+uidNumber: 4004
+userPassword:: MTIzNDU2
+
+dn: uid=david.xie,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: david.xie
+gidNumber: 4000
+homeDirectory: /home/david.xie
+uid: david.xie
+uidNumber: 4001
+userPassword:: MTIzNDU2
+
+dn: uid=dongyue.li,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: dongyue.li
+gidNumber: 4000
+homeDirectory: /home/dongyue.li
+uid: dongyue.li
+uidNumber: 4002
+userPassword:: MTIzNDU2
+
+dn: uid=eric.huang.poa,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: eric.huang.poa
+gidNumber: 4000
+homeDirectory: /home/eric.huang.poa
+uid: eric.huang.poa
+uidNumber: 4003
+userPassword:: MTIzNDU2
+
+dn: uid=mengfanhui,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: mengfanhui
+gidNumber: 5000
+homeDirectory: /home/mengfanhui
+uid: mengfanhui
+uidNumber: 5005
+userPassword:: MTIzNDU2
+
+dn: uid=qianzongyuan,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: qianzongyuan
+gidNumber: 5000
+homeDirectory: /home/qianzongyuan
+uid: qianzongyuan
+uidNumber: 5004
+userPassword:: MTIzNDU2
+
+dn: uid=sunchunfang1,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: sunchunfang1
+gidNumber: 5000
+homeDirectory: /home/sunchunfang1
+uid: sunchunfang1
+uidNumber: 5001
+userPassword:: MTIzNDU2
+
+dn: uid=zhuchangjiang,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: zhuchangjiang
+gidNumber: 5000
+homeDirectory: /home/zhuchangjiang
+uid: zhuchangjiang
+uidNumber: 5002
+userPassword:: MTIzNDU2
+
+dn: uid=xiongyiming,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: xiongyiming
+gidNumber: 5000
+homeDirectory: /home/xiongyiming
+uid: xiongyiming
+uidNumber: 5003
+userPassword:: MTIzNDU2
+
+dn: uid=liwenhuan,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: liwenhuan
+gidNumber: 5000
+homeDirectory: /home/liwenhuan
+uid: liwenhuan
+uidNumber: 5006
+userPassword:: MTIzNDU2
+
+dn: uid=chiping3,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: chiping3
+gidNumber: 5000
+homeDirectory: /home/chiping3
+uid: chiping3
+uidNumber: 5007
+userPassword:: MTIzNDU2
+
+dn: uid=ganjianling,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: ganjianling
+gidNumber: 5000
+homeDirectory: /home/ganjianling
+uid: ganjianling
+uidNumber: 5008
+userPassword:: MTIzNDU2
+
+dn: uid=credit_app_user,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: credit_app_user
+gidNumber: 5200
+homeDirectory: /home/credit_app_user
+uid: credit_app_user
+uidNumber: 5201
+userPassword:: MTIzNDU2
+
+dn: cn=credit_app_group,ou=Group,dc=idc,dc=wanda-group,dc=net
+objectClass: posixGroup
+objectClass: top
+cn: credit_app_group
+gidNumber: 5200
+memberUid:: IA==
+
+dn: uid=qianming3,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: qianming3
+gidNumber: 6000
+homeDirectory: /home/qianming3
+uid: qianming3
+uidNumber: 6001
+userPassword:: MTIzNDU2
+
+dn: uid=lvqiming,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: lvqiming
+gidNumber: 6000
+homeDirectory: /home/lvqiming
+uid: lvqiming
+uidNumber: 6002
+userPassword:: MTIzNDU2
+
+dn: uid=xiazhiqiang1,ou=People,dc=idc,dc=wanda-group,dc=net
+objectClass: account
+objectClass: top
+objectClass: posixAccount
+cn: xiazhiqiang1
+gidNumber: 6000
+homeDirectory: /home/xiazhiqiang1
+uid: xiazhiqiang1
+uidNumber: 6003
+userPassword:: MTIzNDU2
+
+dn: cn=loan_app_group,ou=Group,dc=idc,dc=wanda-group,dc=net
+objectClass: posixGroup
+objectClass: top
+cn: loan_app_group
+gidNumber: 6200
+memberUid:: IA==
+
+dn: cn=99bill_app_group,ou=Group,dc=idc,dc=wanda-group,dc=net
+objectClass: posixGroup
+objectClass: top
+cn: 99bill_app_group
+gidNumber: 4200
+memberUid:: IA==
+

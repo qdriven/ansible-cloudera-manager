@@ -1,0 +1,5 @@
+#! /bin/bash
+
+kdb5_util dump /var/kerberos/krb5kdc/secondary_trans
+kprop -f /var/kerberos/krb5kdc/secondary_trans {{ hostvars[ groups['kdc'][1] ].inventory_hostname }}
+

@@ -1,0 +1,36 @@
+---
+- name: run wd_setup_cdh.py
+  shell: python wd_setup_cdh.py
+  args:
+    chdir: /tmp/python/cdh_api_folder/
+  when: cm is defined
+
+- name: copy java
+  shell: rm -rf java.tar | tar cvf java.tar java
+  args:
+    chdir: "/usr/share"
+  when: cm is defined
+- fetch: 
+    src: /usr/share/java.tar
+    dest: /tmp
+  when: cm is defined
+- copy: 
+    src: /tmp/{{ hostvars[ groups['hadoop-cluster'][0] ].inventory_hostname }}/usr/share/java.tar 
+    dest: /usr/share
+    mode: 0644
+  when: cm is not defined
+- shell: tar -xf java.tar
+  args:
+    chdir: "/usr/share"
+  when: cm is not defined 
+
+- shell: python {{ item }}
+  with_items:
+    - cdh_first_run.py
+    - service_hdfs_enableHa.py
+    - service_yarn_enableHa.py
+    - service_kerbebos_enable.py
+    - service_ldap_enable.py
+  args:
+    chdir: /tmp/python/cdh_api_folder/
+  when: cm is defined

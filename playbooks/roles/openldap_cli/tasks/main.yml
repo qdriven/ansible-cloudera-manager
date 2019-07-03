@@ -1,0 +1,20 @@
+---
+- name: Load OS specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "redhat-7.yml"
+      paths:
+        - ../vars
+
+- yum: name="{{ item }}"  update_cache=yes state=removed 
+  with_items:
+    - pam_ldap
+    - sssd
+- yum: name={{ item }} update_cache=yes state=latest
+  with_items:
+    - pam_ldap
+    - sssd
+
+- name: Initialize OpenLDAP Client Configuration
+  shell: authconfig --enableldap --enableldapauth --ldapserver=ldap://{{ virtual_ipaddress }}:389 --ldapbasedn="dc=idc,dc=wanda-group,dc=net" --enablemkhomedir --disablecache --update

@@ -1,0 +1,6 @@
+packages:
+  - mariadb-server
+  - MySQL-python
+
+db_admin_pass: 123456
+db_pass: 123456

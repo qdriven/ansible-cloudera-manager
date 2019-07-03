@@ -1,0 +1,10 @@
+---
+- include: check.yml
+- include: common.yml
+- include: kerberos.yml
+- include: mariadb.yml
+- include: openldap.yml
+- include: openldap_cli.yml
+- include: nginx-keepalived.yml
+- include: cm.yml
+- include: cdh_install.yml

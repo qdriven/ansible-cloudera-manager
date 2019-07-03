@@ -1,0 +1,28 @@
+[logging]
+ default = FILE:/var/log/krb5libs.log
+ kdc = FILE:/var/log/krb5kdc.log
+ admin_server = FILE:/var/log/kadmind.log
+
+[libdefaults]
+ default_realm = {{krb_realm|upper}}
+ dns_lookup_realm = false
+ dns_lookup_kdc = false
+ ticket_lifetime = 24h
+ renew_lifetime = 7d
+ forwardable = true
+
+[realms]
+{{krb_realm|upper}} = {
+{% for node in groups['kdc'] %}
+kdc = {{ hostvars[node]['inventory_hostname'] }}:{{kdc_port}}
+{% endfor %}
+{% for node in groups['kdc'] if hostvars[node].master is defined %}
+admin_server = {{ hostvars[node]['inventory_hostname'] }}:{{krb_admin_port}}
+{% endfor %}
+default_domain = {{krb_realm|upper}}
+}
+
+[domain_realm]
+.{{krb_realm|lower}} = {{krb_realm|upper}}
+{{krb_realm|lower}} = {{krb_realm|upper}}
+

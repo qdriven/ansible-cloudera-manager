@@ -1,0 +1,15 @@
+---
+- name: Prepare Kerberos to kdc and kadmin
+  hosts: kdc
+  any_errors_fatal: true
+  become: yes
+  pre_tasks:
+    - name: include global settings
+      include_vars: "{{ item }}"
+      with_items: 
+        - group_vars/all
+    - name: Show kdc info
+      debug: var=hostvars[inventory_hostname]
+      when: debug
+  roles:
+    - kerberos

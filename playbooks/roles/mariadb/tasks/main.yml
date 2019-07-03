@@ -1,0 +1,57 @@
+---
+ - name: Load OS specific variables
+   include_vars: "{{ item }}"
+   with_first_found:
+     - files:
+         - "redhat-7.yml"
+       paths:
+         - ../vars
+ 
+ - name: clear mysql
+   service: name=mysql enabled=no state=stopped 
+   ignore_errors: true
+ - yum: name=mariadb-server state=absent
+   ignore_errors: true
+ - file: path=/var/lib/mysql state=absent
+   ignore_errors: true
+ 
+ - name: ensure required packages are installed
+   yum: 
+     name: "{{ item }}" 
+     update_cache: yes 
+     state: installed
+   with_items: "{{ packages|default([]) }}"
+ 
+ - name: Prepare mysql conf
+   template: src=my.cnf.j2 dest=/etc/my.cnf mode=0644
+ 
+ - name: Start MariaDB
+   service: name=mysql enabled=yes state=started
+ - wait_for:
+     port: 3306
+     delay: 10
+ 
+ - name: Create DBs
+   mysql_db: name={{item}} state=present encoding=utf8 config_file=/etc/my.cnf login_user=root
+   with_items: [nav, navms, cm, hue, amon, rman, sentry, metastore, oozie]
+ 
+ - name: Create Navigator DB User
+   mysql_user: name={{item}} password={{db_pass}} priv={{item}}.*:ALL state=present login_user=root
+   with_items: [nav, navms, hue, amon, rman, sentry, oozie]
+ 
+ - name: Create DB Hive Metastore User
+   mysql_user: name=hive password={{db_pass}} priv=metastore.*:ALL state=present login_user=root host={{item}}
+   with_items:
+     - "{{ groups['hadoop-cluster'] }}"
+     - "{{ virtual_ipaddress }}"
+     - localhost
+ 
+ - mysql_user: name={{ item[0] }} password={{db_pass}} priv={{ item[0] }}.*:ALL state=present login_user=root host={{ item[1] }}
+   with_nested:
+     - ["cm","nav","navms","hue","amon", "rman","sentry","oozie"]
+     - "{{ groups['hadoop-cluster'] }}"
+     
+ - mysql_user: name={{ item[0] }} password={{db_pass}} priv={{ item[0] }}.*:ALL state=present login_user=root host={{ item[1] }}
+   with_nested:
+     - ["cm","nav","navms","hue","amon", "rman","sentry","oozie"]
+     - ["{{ virtual_ipaddress }}", "localhost"]

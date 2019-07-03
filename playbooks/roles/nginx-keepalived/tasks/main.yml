@@ -1,0 +1,63 @@
+---
+- name: stop and remove Nginx Keppalived services
+  service: name={{ item }} enabled=no state=stopped
+  with_items:
+    - nginx
+    - keepalived
+  ignore_errors: true
+
+- name: uninstall nginx && keepalived
+  yum: name={{ item }} update_cache=yes state=removed
+  with_items:
+    - nginx
+    - keepalived
+  ignore_errors: true
+- file: name={{ item }} state=absent
+  with_items:
+    - /etc/nginx
+    - /etc/keepalived
+    
+- name: stop mysql service
+  service: name=mysql enabled=no state=stopped
+  ignore_errors: true
+
+- name: check port 3306 5088
+  shell: lsof -i :3306 -a -i :5088 | grep LISTEN | wc -l
+  register: var_reg
+  
+- assert: {that: "var_reg.stdout == '0'" }
+
+- name: check network
+  shell: ip a
+  register: var_reg
+- assert: { that: "'{{ def_bind_eth }}:' in var_reg.stdout" }
+
+- name: Install Nginx
+  yum: name=nginx update_cache=yes state=installed
+- shell: cp {{ item }} {{ item }}.ORIG
+  with_items:
+    - /etc/nginx/conf.d/default.conf
+    - /etc/nginx/nginx.conf
+- template: src="default.conf.j2" dest="/etc/nginx/conf.d/default.conf"
+- template: src="nginx.conf.j2" dest="/etc/nginx/nginx.conf"
+- service: name=nginx enabled=yes state=started
+
+- name: Install Keepalived
+  yum: name=keepalived update_cache=yes state=latest
+- service: name=keepalived enabled=no state=stopped
+- shell: "cp /etc/keepalived/keepalived.conf /etc/keepalived/keepalived.conf.ORIG"
+- template: src="keepalived.conf.j2" dest="/etc/keepalived/keepalived.conf"
+
+- name: master and slave configuration
+  shell: "sed -i -e 's/MASTER_OR_SLAVE/MASTER/g' /etc/keepalived/keepalived.conf"
+  when: master is defined
+- shell: "sed -i -e 's/PRIORITY_LEVEL/101/g' /etc/keepalived/keepalived.conf"
+  when: master is defined
+- shell: "sed -i -e 's/MASTER_OR_SLAVE/SLAVE/g' /etc/keepalived/keepalived.conf"
+  when: standby is defined
+- shell: "sed -i -e 's/PRIORITY_LEVEL/98/g' /etc/keepalived/keepalived.conf"
+  when: standby is defined
+
+- name: check nginx scripts and start keeplived
+  copy: src=files/check_nginx.sh dest=/usr/bin/check_nginx.sh mode=0755
+- service: name=keepalived enabled=yes state=started
